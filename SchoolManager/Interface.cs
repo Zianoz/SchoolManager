@@ -16,11 +16,11 @@ namespace SchoolManager
             Console.WriteLine("Choose an option:");
             Console.WriteLine("1. View/Edit Employees");
             Console.WriteLine("2. View/Edit Students");
-            Console.WriteLine("3. Fetch Students in a Class");
-            Console.WriteLine("4. Fetch Grades from last month");
-            Console.WriteLine("5. Check Grades");
-            Console.WriteLine("6. Add new student");
-            Console.WriteLine("7. Add new employee");
+            Console.WriteLine("3. View grades");
+            Console.WriteLine("4. ");
+            Console.WriteLine("5. ");
+            Console.WriteLine("6. ");
+            Console.WriteLine("7. ");
             Console.WriteLine("8. Exit");
             string choice = Console.ReadLine();
 
@@ -36,6 +36,11 @@ namespace SchoolManager
                     Console.Clear();
                     Student.FetchStudents(connectionString);
                     WaitForX();
+                    break;
+
+                case "3":
+                    Console.Clear();
+                    Grades.GradeOption(connectionString);
                     break;
             }
         }

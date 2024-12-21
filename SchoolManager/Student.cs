@@ -1,9 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SchoolManager
 {
@@ -17,7 +13,7 @@ namespace SchoolManager
 
         public static void FetchStudents(string connectionString)
         {
-            Console.WriteLine("Would you like to see all the students? filter by role? (all/role)");
+            Console.WriteLine("Would you like to see all the students or filter by class? (all/class)");
             string filter = Console.ReadLine();
 
             using (SqlConnection connection = ConnectionDB.GetDatabaseConnection(connectionString))
@@ -26,34 +22,41 @@ namespace SchoolManager
                 {
                     string query = "SELECT StudentID, StudentFirstName, StudentLastName, StudentPersonNumber, ClassID FROM Students";
 
-                    if (filter?.ToLower() == "role")
+                    if (filter?.ToLower() == "class")
                     {
-                        using (SqlCommand command = new SqlCommand("SELECT DISTINCT EmployeeRole FROM Employees", connection))
+                        // Show all available ClassIDs
+                        using (SqlCommand command = new SqlCommand("SELECT DISTINCT ClassID FROM Classes", connection))
                         {
                             using (SqlDataReader reader = command.ExecuteReader())
                             {
-                                Console.WriteLine("Here are all the roles: ");
+                                Console.WriteLine("Available Classes:");
                                 while (reader.Read())
                                 {
-                                    Console.WriteLine($"{reader["EmployeeRole"]}");
+                                    Console.WriteLine($"ClassID: {reader["ClassID"]}");
                                 }
                             }
                         }
 
-                        Console.WriteLine("Enter a role");
-                        string role = Console.ReadLine();
-                        query += " WHERE EmployeeRole = @Role";
+                        // Prompt the user to enter a ClassID
+                        Console.WriteLine("Enter a ClassID:");
+                        int classId;
+                        while (!int.TryParse(Console.ReadLine(), out classId))
+                        {
+                            Console.WriteLine("Invalid input. Please enter a numeric ClassID:");
+                        }
+
+                        query += " WHERE ClassID = @ClassID";
 
                         using (SqlCommand command = new SqlCommand(query, connection))
                         {
-                            command.Parameters.AddWithValue("@Role", role);
+                            command.Parameters.AddWithValue("@ClassID", classId);
 
                             using (SqlDataReader reader = command.ExecuteReader())
                             {
                                 Console.WriteLine("Students:");
                                 while (reader.Read())
                                 {
-                                    Console.WriteLine($"ID: {reader["EmployeeID"]}, NAME: {reader["EmployeeFirstName"]}, {reader["EmployeeLastName"]}, PERSONAL NUMBER: {reader["StudentPersonNumber"]}, CLASSID: {reader["ClassID"]}, STARTDATE: {reader["EmployeeStart"]}");
+                                    Console.WriteLine($"ID: {reader["StudentID"]}, NAME: {reader["StudentFirstName"]} {reader["StudentLastName"]}, PERSONAL NUMBER: {reader["StudentPersonNumber"]}, CLASSID: {reader["ClassID"]}");
                                 }
                             }
                         }
