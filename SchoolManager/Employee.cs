@@ -12,9 +12,31 @@ namespace SchoolManager
         public int Salary { get; set; }
         public DateTime startDate { get; set; }
 
+        public static void FetchTeacherDepartments()
+        {
+            using (var context = new SchoolContext())
+            {
+                var departmentCounts = context.Employees
+                    .GroupBy(e => e.EmployeeRole)
+                    .Select(group => new
+                    {
+                        Department = group.Key,
+                        EmployeeCount = group.Count()
+                    })
+                    .ToList();
+
+                Console.WriteLine("Department | Employee Count");
+                Console.WriteLine(new string('-', 30));
+
+                foreach (var department in departmentCounts)
+                {
+                    Console.WriteLine($"{department.Department} | {department.EmployeeCount}");
+                }
+            }
+        }
         public static void FetchEmployees(string connectionString)
         {
-            Console.WriteLine("Do you want to VIEW or EDIT employees?");
+            Console.WriteLine("Do you want to VIEW/EDIT employees or (check how many employees in each department? EF)");
             string filter = Console.ReadLine();
 
             if (filter.ToLower() == "view")
@@ -79,6 +101,11 @@ namespace SchoolManager
                                     }
                                 }
                             }
+                        }
+
+                        else if (filter.ToLower() == "Departments")
+                        {
+                            FetchTeacherDepartments();
                         }
                         else
                         {
