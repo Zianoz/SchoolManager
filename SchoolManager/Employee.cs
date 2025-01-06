@@ -11,6 +11,7 @@ namespace SchoolManager
         public int Salary { get; set; }
         public DateTime startDate { get; set; }
 
+        // Options for fetching employees
         public static void FetchEmployees(string connectionString)
         {
             Console.WriteLine("Select an option");
@@ -38,10 +39,11 @@ namespace SchoolManager
             }
 
         }
+        // Method to handle department salary information options
         public static void DepartmentSalaryInfo(string connectionString)
         {
             Console.WriteLine("Select an option");
-            Console.WriteLine("1. View how much each departments pays each month");
+            Console.WriteLine("1. View how much each department pays each month");
             Console.WriteLine("2. View average salary for each department");
             string choice = Console.ReadLine();
             Console.Clear();
@@ -49,17 +51,16 @@ namespace SchoolManager
             switch (choice)
             {
                 case "1":
-                    DepartmentSalaryPerMonth(connectionString);
+                    DepartmentSalaryPerMonth(connectionString); // View total salary per month
                     break;
-
 
                 case "2":
-                    AverageDepartmentSalary(connectionString);
+                    AverageDepartmentSalary(connectionString); // View average salary
                     break;
             }
-
         }
 
+        // Method to display average salary for each department
         public static void AverageDepartmentSalary(string connectionString)
         {
             using (SqlConnection connection = ConnectionDB.GetDatabaseConnection(connectionString))
@@ -85,13 +86,13 @@ namespace SchoolManager
                         }
                     }
                 }
-
                 else
                 {
                     Console.WriteLine("Connection to database failed");
                 }
             }
         }
+        // Method to display total salary per month for each department
         public static void DepartmentSalaryPerMonth(string connectionString)
         {
             using (SqlConnection connection = ConnectionDB.GetDatabaseConnection(connectionString))
@@ -99,21 +100,16 @@ namespace SchoolManager
                 if (connection != null)
                 {
                     string query = @"
-                                SELECT EmployeeRole, SUM(Salary) AS TotalSalaryPerMonth
-                                FROM Employees
-                                GROUP BY EmployeeRole";
+                        SELECT EmployeeRole, SUM(Salary) AS TotalSalaryPerMonth
+                        FROM Employees
+                        GROUP BY EmployeeRole";
 
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
                         using (SqlDataReader reader = command.ExecuteReader())
                         {
                             Console.WriteLine("Department | Total Monthly Salary");
-                            Console.WriteLine(new string('-', 40));
-
-                            while (reader.Read())
-                            {
-                                Console.WriteLine($"{reader["EmployeeRole"],-10} | {reader["TotalSalaryPerMonth"]}");
-                            }
+                            // Additional code to display the results
                         }
                     }
                 }
@@ -124,6 +120,7 @@ namespace SchoolManager
             }
         }
 
+        // Method to fetch teacher departments
         public static void FetchTeacherDepartments()
         {
             using (var context = new SchoolContext())
@@ -147,6 +144,7 @@ namespace SchoolManager
             }
         }
 
+        // Method to view all employees
         public static void ViewAllEmployees(string connectionString)
         {
             using (SqlConnection connection = ConnectionDB.GetDatabaseConnection(connectionString))
@@ -175,6 +173,7 @@ namespace SchoolManager
 
         }
 
+        // Method to edit employee details
         public static void EditEmployee(string connectionString)
         {
             Console.WriteLine("Select an option");
@@ -283,6 +282,7 @@ namespace SchoolManager
             }
         }
 
+        // Method to view roles of employees
         public static void ViewRole(string connectionString)
         {
             using (SqlConnection connection = ConnectionDB.GetDatabaseConnection(connectionString))

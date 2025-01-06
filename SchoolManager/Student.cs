@@ -19,6 +19,7 @@ namespace SchoolManager
             Console.WriteLine("2. View student in a class");
             Console.WriteLine("3. View student by ID"); //Stored procedure
             string choice = Console.ReadLine();
+            Console.Clear();
 
             switch (choice)
             {
@@ -59,6 +60,7 @@ namespace SchoolManager
             }
         }
 
+        // Displays students in a specific class
         public static void DisplayStudentsInClass(string connectionString)
         {
             using (SqlConnection connection = ConnectionDB.GetDatabaseConnection(connectionString))
@@ -113,6 +115,7 @@ namespace SchoolManager
             }
         }
 
+        // Executes a stored procedure
         public static void StoredProcedure(string connectionString)
         {
             Console.WriteLine("Enter the Student ID to search:");

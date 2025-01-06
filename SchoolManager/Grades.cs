@@ -3,8 +3,10 @@ using System;
 
 namespace SchoolManager
 {
+    // Main class for managing grades
     internal class Grades
     {
+        // Method to display options for viewing or setting grades
         public static void GradeOption(string connectionString)
         {
             while (true)
@@ -18,27 +20,26 @@ namespace SchoolManager
                 switch (choice)
                 {
                     case "1":
-                        ViewGrades(connectionString);
+                        ViewGrades(connectionString); // View grades
                         return;
                     case "2":
-                        SetGrade(connectionString);
+                        SetGrade(connectionString); // Set a grade
                         return;
                     default:
                         Console.WriteLine("Wrong syntax try again");
                         break;
                 }
-
             }
         }
 
+        // Method to set a grade for a student in a course
         internal static void SetGrade(string connectionString)
         {
             using (SqlConnection connection = ConnectionDB.GetDatabaseConnection(connectionString))
             {
                 if (connection != null)
                 {
-                    //Begin transaction
-                    SqlTransaction transaction = connection.BeginTransaction();
+                    SqlTransaction transaction = connection.BeginTransaction(); // Begin transaction
 
                     try
                     {
@@ -84,7 +85,7 @@ namespace SchoolManager
                             Console.Write("Invalid input. Please enter a valid CourseID: ");
                         }
 
-                        //List all teachers (employees)
+                        // List all teachers (employees)
                         Console.WriteLine("\nSelect an Employee ID (Teacher) from the following list:");
                         string employeeQuery = "SELECT EmployeeID, EmployeeFirstName, EmployeeLastName FROM Employees WHERE EmployeeRole = 'Teacher'";
                         using (SqlCommand employeeCommand = new SqlCommand(employeeQuery, connection, transaction))
@@ -105,7 +106,7 @@ namespace SchoolManager
                             Console.Write("Invalid input. Please enter a valid EmployeeID: ");
                         }
 
-                        //Enter Grade
+                        // Enter Grade
                         Console.Write("Enter Grade (A, B, C, D, E, F): ");
                         string grade = Console.ReadLine();
 
@@ -123,17 +124,15 @@ namespace SchoolManager
                             insertCommand.Parameters.AddWithValue("@Grade", grade);
                             insertCommand.Parameters.AddWithValue("@AssignedDate", assignedDate);
 
-                            insertCommand.ExecuteNonQuery();
+                            insertCommand.ExecuteNonQuery(); // Execute insert command
                         }
 
-                        // Commit the transaction if all commands succeed
-                        transaction.Commit();
+                        transaction.Commit(); // Commit the transaction
                         Console.WriteLine("Grade assigned successfully!");
                     }
                     catch (Exception ex)
                     {
-                        // Rollback the transaction if any command fails
-                        transaction.Rollback();
+                        transaction.Rollback(); // Rollback the transaction if any command fails
                         Console.WriteLine($"An error occurred: {ex.Message}");
                         Console.WriteLine("Transaction has been rolled back.");
                     }
@@ -145,6 +144,7 @@ namespace SchoolManager
             }
         }
 
+        // Method to view grades
         internal static void ViewGrades(string connectionString)
         {
             using (SqlConnection connection = ConnectionDB.GetDatabaseConnection(connectionString))
@@ -182,7 +182,6 @@ namespace SchoolManager
 
                                 Console.WriteLine($"GradeID: {gradeId}, Student: {studentName}, Course: {courseName}, Grade: {grade}, Teacher: {teacherName}, Date Assigned: {assignedDate.ToShortDateString()}");
                             }
-
                         }
                     }
                 }

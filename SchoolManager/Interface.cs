@@ -10,7 +10,7 @@ namespace SchoolManager
 {
     public class Interface
     {
-
+        // Method for program options
         public static void Options(string connectionString)
         {
             Console.WriteLine("Choose an option:");
