@@ -17,11 +17,9 @@ namespace SchoolManager
             Console.WriteLine("1. View/Edit Employees");
             Console.WriteLine("2. View/Edit Students");
             Console.WriteLine("3. View grades");
-            Console.WriteLine("4. ");
-            Console.WriteLine("5. ");
-            Console.WriteLine("6. ");
-            Console.WriteLine("7. ");
-            Console.WriteLine("8. Exit");
+            Console.WriteLine("4. View courses");
+            Console.WriteLine("5. View departments salary info");
+            Console.WriteLine("6. Exit");
             string choice = Console.ReadLine();
 
             switch (choice)
@@ -41,7 +39,29 @@ namespace SchoolManager
                 case "3":
                     Console.Clear();
                     Grades.GradeOption(connectionString);
+                    WaitForX();
                     break;
+
+                case "4":
+                    Console.Clear();
+                    Class.AllCourses();
+                    WaitForX();
+                    break;
+                
+                case "5":
+                    Console.Clear();
+                    Employee.DepartmentSalaryInfo(connectionString);
+                    WaitForX();
+                    break;
+                case "6":
+                    Console.Clear();
+                    Environment.Exit(0);
+                    break;
+
+                default:
+                    Console.WriteLine("Wrong syntax try again");
+                    break;
+
             }
         }
 
@@ -52,17 +72,17 @@ namespace SchoolManager
             return Console.ReadKey(intercept: true).Key;
         }
 
-        static void WaitForX()
+        public static void WaitForX()
         {
-            // Set instruction text color
+
             Console.WriteLine("Press X to go back to the menu");
 
             while (true)
             {
-                // Capture the key press
+                // Captures the keypress
                 ConsoleKey keyInfo = WaitForReadkey();
 
-                // Check if the key pressed was 'X' or 'x'
+                // Check if the key pressed was 'X'
                 if (keyInfo == ConsoleKey.X)
                 {
                     Console.Clear();

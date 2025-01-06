@@ -11,7 +11,7 @@ namespace SchoolManager
 
         static void Main(string[] args)
         {
-            string connectionString = "Server=(localdb)\\MSSQLLocalDB;Database=SchoolManager;Trusted_Connection=True";
+            string connectionString = "Server=(localdb)\\mssqllocaldb;Database=SchoolManager;Trusted_Connection=True";
 
             while (true)
             {
